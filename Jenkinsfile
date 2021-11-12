@@ -54,6 +54,22 @@ pipeline {
                         }
                       sh "docker rmi ${env.IMAGE_NAME} ${env.IMAGE_NAME_LATEST}"
                     }
+					when {
+					    banch 'prod'
+						}
+					steps {
+					  input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                        git credentialsId: 'angular', url: 'git@github.com:volshara85/angular_deploy.git'
+                      script {
+                           def dockerImage = docker.build("${env.IMAGE_NAME}", "-f ${env.DOCKERFILE_NAME} .")
+                           docker.withRegistry('', 'dockerhub-creds') {
+                           dockerImage.push()
+                           dockerImage.push("latest")
+                           }
+                           echo "Pushed Docker Image: ${env.IMAGE_NAME}"
+                        }
+                      sh "docker rmi ${env.IMAGE_NAME} ${env.IMAGE_NAME_LATEST}"
+                    }			
         }
     }
 }
