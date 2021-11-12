@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-        stage("Create Docker Image") {
+        stage("Create DEV Docker Image") {
                     agent any
 					when {
 					    branch 'dev'
@@ -54,8 +54,10 @@ pipeline {
                         }
                       sh "docker rmi ${env.IMAGE_NAME} ${env.IMAGE_NAME_LATEST}"
                     }
+		}
+		stage("Create PROD Docker Image") {
 					when {
-					    banch 'prod'
+					    branch 'prod'
 						}
 					steps {
 					  input message: 'Finished using the web site? (Click "Proceed" to continue)'
