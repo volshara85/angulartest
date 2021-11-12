@@ -25,7 +25,7 @@ pipeline {
             stages {
                 stage("install") {
                     steps {
-                       git branch: 'dev', credentialsId: 'angular', url: 'git@github.com:volshara85/angulartest.git'
+                       checkout scm
                        sh 'npm install'
                     }
                 }
