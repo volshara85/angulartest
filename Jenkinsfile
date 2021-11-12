@@ -57,6 +57,7 @@ pipeline {
                     }
 		}
 		stage("Create PROD Docker Image") {
+		            agent any
 					when {
 					    branch 'prod'
 						}
