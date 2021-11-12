@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-        stage("Create Docker Image") {
+        stage("Create DEV Docker Image") {
                     agent any
 					when {
 					    branch 'dev'
@@ -54,6 +54,8 @@ pipeline {
                         }
                       sh "docker rmi ${env.IMAGE_NAME} ${env.IMAGE_NAME_LATEST}"
                     }
+		}
+		stage("Create PROD Docker Image") {
 					when {
 					    branch 'prod'
 						}
