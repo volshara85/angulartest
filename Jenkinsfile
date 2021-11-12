@@ -10,6 +10,7 @@ pipeline {
         IMAGE_NAME = "${env.IMAGE_BASE}:${env.IMAGE_TAG}"
 		IMAGE_NAME_DEV = "${env.IMAGE_NAME}.dev"
         IMAGE_NAME_LATEST = "${env.IMAGE_BASE}:latest"
+	    IMAGE_NAME_LATEST_DEV = "${env.IMAGE_BASE}:latestdev"
         DOCKERFILE_NAME = "Dockerfile"
     }
 
@@ -50,9 +51,9 @@ pipeline {
                            dockerImage.push()
                            dockerImage.push("latestdev")
                            }
-                           echo "Pushed Docker Image: ${env.IMAGE_NAME}"
+                           echo "Pushed Docker Image: ${env.IMAGE_NAME_DEV}"
                         }
-                      sh "docker rmi ${env.IMAGE_NAME} ${env.IMAGE_NAME_LATEST}"
+                      sh "docker rmi ${env.IMAGE_NAME_DEV} ${env.IMAGE_NAME_LATEST_DEV}"
                     }
 		}
 		stage("Create PROD Docker Image") {
