@@ -8,6 +8,7 @@ pipeline {
         IMAGE_BASE = 'volshara85/angular'
         IMAGE_TAG = "v$BUILD_NUMBER"
         IMAGE_NAME = "${env.IMAGE_BASE}:${env.IMAGE_TAG}"
+		IMAGE_NAME_DEV = "${env.IMAGE_NAME}.dev"
         IMAGE_NAME_LATEST = "${env.IMAGE_BASE}:latest"
         DOCKERFILE_NAME = "Dockerfile"
     }
@@ -38,13 +39,16 @@ pipeline {
         }
         stage("Create Docker Image") {
                     agent any
+					when {
+					    branch 'dev'
+						}
                     steps {
                         git credentialsId: 'angular', url: 'git@github.com:volshara85/angular_deploy.git'
                       script {
-                           def dockerImage = docker.build("${env.IMAGE_NAME}", "-f ${env.DOCKERFILE_NAME} .")
+                           def dockerImage = docker.build("${env.IMAGE_NAME_DEV}", "-f ${env.DOCKERFILE_NAME} .")
                            docker.withRegistry('', 'dockerhub-creds') {
                            dockerImage.push()
-                           dockerImage.push("latest")
+                           dockerImage.push("latestdev")
                            }
                            echo "Pushed Docker Image: ${env.IMAGE_NAME}"
                         }
